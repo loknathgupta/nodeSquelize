@@ -1,0 +1,19 @@
+{
+  "name": "nodeseqelize",
+  "version": "1.0.0",
+  "description": "Project with node using sequelize.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/loknathgupta/nodeSquelize.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/loknathgupta/nodeSquelize/issues"
+  },
+  "homepage": "https://github.com/loknathgupta/nodeSquelize#readme"
+}
