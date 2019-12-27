@@ -11,6 +11,8 @@ const sequelize = new Sequelize('sequelizeTest', 'root', 'pass@123', {
 
 // Option 2: Passing a connection URI
 //const sequelize = new Sequelize('postgres://user:pass@example.com:5432/dbname');
+
+//INITIALIZING ALL MODELS*************************
 let db = {}
 fs.readdirSync(__dirname)
 .filter(file => {
@@ -19,24 +21,22 @@ fs.readdirSync(__dirname)
 .forEach(file => {
   var model = sequelize['import'](path.join(__dirname, file));
   db[model.name] = model;
-  console.log(file.name);
 });
 
-//const User = UserModel(sequelize, Sequelize)
 
-// sequelize.sync({ force: false }) //true to drop and recreate the table
+// sequelize.sync({ force: true }) //true to drop and recreate the tables
 // .then(() => {
 //   console.log(`Database & tables created!`)
-// })
+// });
  
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
     db[modelName].associate(db);
   }
 });
-
 console.log(db);
-db.comments.sync()
-.then(data => console.log(data))
-.catch(err => console.log(err));
+// db.comments.sync()
+// .then(data => console.log(data))
+// .catch(err => console.log(err));
+
 module.exports = db;

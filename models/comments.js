@@ -1,15 +1,15 @@
-module.exports = (sequelize, type) => {
+module.exports = (sequelize, dataType) => {
     let comments = sequelize.define('comments', {
         id: {
-          type: type.INTEGER,
+          type: dataType.INTEGER,
           primaryKey: true,
           autoIncrement: true
         },
-        user_id : type.INTEGER,
-        comment: type.STRING
+        user_id : dataType.INTEGER,
+        comment: dataType.STRING
     });
     comments.associate = (models) => {
-      comments.belongsTo(models.user, {
+      comments.belongsTo(models.users, {
         foreignKey: 'user_id',
         targetKey: 'id',
         onDelete: 'CASCADE'
