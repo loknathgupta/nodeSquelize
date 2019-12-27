@@ -13,14 +13,6 @@ import UserList from './Components/List';
 import UserAdd from './Components/Add';
 import UserView from './Components/View';
 
-function Home() {
-	return (
-		<div>
-			<h2>Home</h2>
-		</div>
-	);
-}
-
 function Dashboard() {
 	return (
 		<div>
@@ -45,10 +37,7 @@ function App() {
 						</li>
 						<li>
 							<Link to="/dashboard">Dashboard</Link>
-						</li>
-						<li>
-							<Link to="/list">User List</Link>
-						</li>		
+						</li>						
 					</ul>
 
 					<hr />
