@@ -12,6 +12,7 @@ import Hello from './Components/Hello';
 import UserList from './Components/List';
 import UserAdd from './Components/Add';
 import UserView from './Components/View';
+import UserLogin from './Components/Login';
 
 function Dashboard() {
 	return (
@@ -38,6 +39,9 @@ function App() {
 						<li>
 							<Link to="/dashboard">Dashboard</Link>
 						</li>						
+						<li>
+							<Link to="/login">Login</Link>
+						</li>						
 					</ul>
 
 					<hr />
@@ -60,6 +64,7 @@ function App() {
 
 						<Route path="/add/:id?" component={ UserAdd } />
 						<Route path="/view/:id?" component={ UserView } />
+						<Route path="/login" component={ UserLogin } />
 					</Switch>
 				</div>
 			</Router>

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import config from '../config/config';
+import {config, axiosInstance} from '../config/config';
 import logo from '../logo.svg';
-import Axios from 'axios';
+// import Axios from 'axios';
 
 
 export default class View extends Component {
@@ -23,7 +23,7 @@ export default class View extends Component {
 		//console.log(this.props);
 		let userId = this.props.match.params.id;
 		if(userId >= 1){
-			Axios.get(config.endpoint+'/user/list/'+userId)
+			axiosInstance().get(config.endpoint+'/user/list/'+userId)
 			.then(response => {
 				let userDetails = response.data[0];
 				this.setState({

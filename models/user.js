@@ -6,6 +6,8 @@ module.exports = (sequelize, dataType) => {
           autoIncrement: true
         },
         name: dataType.STRING,
+        email: dataType.STRING,
+        password: dataType.STRING,
         dp:{
             type: dataType.STRING(500),
             comment :'The profile picture'

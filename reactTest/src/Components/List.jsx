@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import logo from '../logo.svg';
-import config from '../config/config';
-import Axios from 'axios';
+import {config, axiosInstance} from '../config/config';
+// import Axios from 'axios';
 import Row from './TableRow';
 import {Link} from "react-router-dom";
 
@@ -21,13 +21,13 @@ export default class List extends Component {
 	}
 
 	componentDidMount() {
-		Axios.get(config.endpoint + '/user/list')
+		axiosInstance().get(config.endpoint + '/user/list')
 		.then(response => {
 			this.setState({users : response.data})				
 		});
 	}
 	refreshGrid = () => {
-		Axios.get(config.endpoint + '/user/list')
+		axiosInstance().get(config.endpoint + '/user/list')
 		.then(response => {
 			this.setState({users : response.data})				
 		});
@@ -38,7 +38,7 @@ export default class List extends Component {
 			return <tr><td colSpan="5">{this.state.loader}</td></tr>;
 		}else{
 			return this.state.users.map((user, i) => {
-				return <Row user={user} key={i} refreshGrid={this.refreshGrid}/>
+				return <Row user={user} key={i} srno={i+1} refreshGrid={this.refreshGrid}/>
 			});
 		}
 	}
@@ -58,8 +58,10 @@ export default class List extends Component {
 					<table border="1" width="100%">
 						<thead>
 							<tr>
+							<th>Sr. No</th>
 							<th>Id</th>
 							<th>Name</th>
+							<th>Email</th>
 							<th>Status</th>
 							<th>DP</th>
 							<th>Action</th>

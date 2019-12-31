@@ -1,4 +1,31 @@
+import Axios from 'axios';
 let config = {
-    endpoint : 'http://localhost:4000'
+    endpoint: 'http://localhost:4001'
 }
-export default config;
+
+const axiosInstance = () => {
+    let instance = Axios.create({
+        baseURL: config.endpoint,
+        /* other custom settings */
+    });
+    instance.interceptors.request.use(function (config) {
+        config.headers.Authorization = 'Bearer ' + localStorage.getItem('token');
+        return config;
+    });
+    instance.interceptors.response.use(response => {
+        return response;
+    }, error => {
+        if (error.response.status === 401) {
+            //Service.logout()
+        }
+        return error;
+    });
+
+    return instance;
+}
+
+
+export {
+    config,
+    axiosInstance
+}

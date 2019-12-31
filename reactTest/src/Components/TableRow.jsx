@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import config from '../config/config';
+import {config, axiosInstance} from '../config/config';
 import {Link} from "react-router-dom";
-import Axios from "axios";
+// import Axios from "axios";
 
 class TableRow extends Component {
 	
@@ -12,7 +12,7 @@ class TableRow extends Component {
 	}
 
 	handleDelete = () => {
-		Axios.post(config.endpoint+'/user/delete', {id:this.props.user.id})
+		axiosInstance().post(config.endpoint+'/user/delete', {id:this.props.user.id})
 		.then(response=>{
 			console.log(response.data);
 			this.props.refreshGrid();
@@ -24,10 +24,16 @@ class TableRow extends Component {
 		return (
 			<tr>
 				<td>
+					{this.props.srno}
+				</td>
+				<td>
 					{this.props.user.id}
 				</td>
 				<td>
 					{this.props.user.name}
+				</td>
+				<td>
+					{this.props.user.email}
 				</td>
 				<td>
 					{this.props.user.status === 'E' ? 'Enabled' : (this.props.user.status === 'B' ? 'Blocked' : 'Disabled')}
