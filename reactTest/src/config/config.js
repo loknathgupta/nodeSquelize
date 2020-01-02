@@ -15,13 +15,11 @@ const axiosInstance = () => {
     });
     instance.interceptors.response.use(response => {
         return response;
-    }, 
-    error => {
+    }, error => {
         if (error.response.status === 401) {
-            loginService.logout();
-            return error;
+            loginService.logout()
         }
-        
+        return error;
     });
 
     return instance;
