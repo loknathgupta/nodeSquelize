@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import {config, axiosInstance} from '../config/config';
 // import Axios from 'axios';
 import { AvForm, AvField } from 'availity-reactstrap-validation';
 import { Button } from 'reactstrap';
+//import config, {axiosInstance} from '../config/config';
+import loginService from '../Services/loginService';
 
 
 export default class List extends Component {
@@ -23,11 +24,19 @@ export default class List extends Component {
 		}
 		console.log(values)
 		//let formData = new FormData(document.getElementById('loginForm'));
-		axiosInstance().post(config.endpoint+'/user/login', values)
-		.then(response => {
-			console.log(response.data)
-			localStorage.setItem('token', response.data.token);
-			//this.props.history.push('/list');
+		// axiosInstance().post(config.endpoint+'/user/login', values)
+		// .then(response => {
+		// 	console.log(response)
+		// 	//if(response.status)
+		// 	localStorage.setItem('token', response.data.token);
+		// 	this.props.history.push('/list');
+		// });
+		loginService.login(values.email, values.password)
+		.then(responseData => {
+			console.log('response fg fgg', responseData);
+			if(responseData.status === 'success'){
+				this.props.history.push('/list');
+			}
 		});
 	}
 	
@@ -37,7 +46,7 @@ export default class List extends Component {
 
 	render() {		
 		return (
-			<div>
+			<div className="col-3">
 				<AvForm onSubmit={this.handleSubmit} id="loginForm">
 
 					<div className="form-group">

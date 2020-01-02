@@ -36,3 +36,15 @@
     transform: rotate(360deg);
   }
 }
+.form-group {
+  text-align: left;
+}
+.menuLinks {
+  width: 100%;
+  float: left;
+}
+.menuLinks li{
+  list-style-type: none;
+  float: left;
+  margin-right: 20px;
+}

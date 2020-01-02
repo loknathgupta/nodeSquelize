@@ -13,6 +13,7 @@ import UserList from './Components/List';
 import UserAdd from './Components/Add';
 import UserView from './Components/View';
 import UserLogin from './Components/Login';
+import loginService from './Services/loginService';
 
 function Dashboard() {
 	return (
@@ -21,27 +22,34 @@ function Dashboard() {
 		</div>
 	);
 }
+let handleLogout = () => {
+	loginService.logout();
+}
 
 
 
 function App() {
 	return (
-		<div className="App">			
+		<div className="App" >
+			
 			<Router>
 				<div>
-					<ul>
+					<ul className="menuLinks">
 						<li>
-							<Link to="/">Home</Link>
+							<Link to="/list" className="btn btn-info">Home</Link>
 						</li>
 						<li>
-							<Link to="/about">About</Link>
+							<Link to="/about" className="btn btn-info">About</Link>
 						</li>
 						<li>
-							<Link to="/dashboard">Dashboard</Link>
-						</li>						
+							<Link to="/dashboard" className="btn btn-info">Dashboard</Link>
+						</li>
 						<li>
-							<Link to="/login">Login</Link>
-						</li>						
+							<Link to="/login" className="btn btn-info">Login</Link>
+						</li>
+						<li>
+							<button onClick={handleLogout} className="btn btn-danger">Logout</button>
+						</li>
 					</ul>
 
 					<hr />
@@ -54,17 +62,17 @@ function App() {
 						of them to render at a time
 					*/}
 					<Switch>
-						<Route exact path="/" component={ UserList } />							
-						<Route path="/about" component={ Hello } />
-						<Route path="/dashboard" component={ Dashboard } />
-												
+						<Route exact path="/" component={UserList} />
+						<Route path="/about" component={Hello} />
+						<Route path="/dashboard" component={Dashboard} />
+
 						<Route path="/list">
 							<UserList />
 						</Route>
 
-						<Route path="/add/:id?" component={ UserAdd } />
-						<Route path="/view/:id?" component={ UserView } />
-						<Route path="/login" component={ UserLogin } />
+						<Route path="/add/:id?" component={UserAdd} />
+						<Route path="/view/:id?" component={UserView} />
+						<Route path="/login" component={UserLogin} />
 					</Switch>
 				</div>
 			</Router>

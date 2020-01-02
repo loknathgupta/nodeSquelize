@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import {config, axiosInstance} from '../config/config';
-import logo from '../logo.svg';
-// import Axios from 'axios';
 import { AvForm, AvField } from 'availity-reactstrap-validation';
 import { Button } from 'reactstrap';
+import config, {axiosInstance} from '../config/config';
+import logo from '../logo.svg';
+import userService from '../Services/userService';
 
 
 export default class List extends Component {
@@ -52,9 +52,9 @@ export default class List extends Component {
 		// console.log(props);
 		let userId = this.props.match.params.id;
 		if(userId >= 1){
-			axiosInstance().get(config.endpoint+'/user/list/'+userId)
-			.then(response => {
-				let userDetails = response.data[0];
+			userService.list(userId)
+			.then(users => {
+				let userDetails = users[0];
 				console.log('userDetails', userDetails);
 				this.setState({
 					id : userDetails.id,
@@ -70,7 +70,7 @@ export default class List extends Component {
 
 	render() {		
 		return (
-			<div>
+			<div className="col-7">
 				<AvForm onSubmit={this.handleSubmit} id="addForm">
 					<div className="form-group">
 						<label >Username</label>

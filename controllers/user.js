@@ -60,7 +60,7 @@ let controller = {
                         fs.unlinkSync(filePath);
                         // Do something
                     }
-                    dataToUpdate.dp = req.file.filename;
+                    dataToUpdate.dp = req.file.path;
                 }
                 console.log('dataToUpdate', dataToUpdate);
                 user.update(dataToUpdate)
@@ -106,11 +106,15 @@ let controller = {
 
                 console.log(token);
                 res.status(200).json({
+                    status:'success',
                     message: "Logged-in Successfully.",
                     token : token
                 });
             }
-            res.status(401).json({message: "Invalid log-in Details."});
+            res.status(200).json({
+                status:'error', 
+                message: "Invalid log-in Details."
+            });
         })
         .catch(err => {
             console.log(err);
@@ -141,13 +145,19 @@ let controller = {
     },
 
     deleteUser : (req, res, next) => {
-        console.log(req.body);
-        
         let userId = req.body.id;
         if(userId >=1){
             db.users.destroy({where: {id:userId}})
             .then(user => {
-                res.status(200).json(user);                
+                res.status(200).json({
+                    status:'success', 
+                    user
+                });                
+            })
+            .catch(err => {
+                res.status(200).json({
+                    status:'error', 
+                }); 
             });            
         }
     }

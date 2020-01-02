@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import logo from '../logo.svg';
-import {config, axiosInstance} from '../config/config';
-// import Axios from 'axios';
-import Row from './TableRow';
 import {Link} from "react-router-dom";
+import logo from '../logo.svg';
+import Row from './TableRow';
+import userService from '../Services/userService';
 
 export default class List extends Component {
 	constructor(props) {
@@ -12,34 +11,33 @@ export default class List extends Component {
 			loader: <img src={logo} className="App-logo" alt="logo" />,
 			users : []
 		}
-		this.handleAddNew = this.handleAddNew.bind(this);
 		this.refreshGrid = this.refreshGrid.bind(this);
 	}
 
-	handleAddNew = () => {
-		window.location.replace('/add');
-	}
+	
 
-	componentDidMount() {
-		axiosInstance().get(config.endpoint + '/user/list')
-		.then(response => {
-			this.setState({users : response.data})				
+	componentDidMount() {		
+		userService.list()
+		.then(users => {
+			this.setState({users : users});
 		});
 	}
 	refreshGrid = () => {
-		axiosInstance().get(config.endpoint + '/user/list')
-		.then(response => {
-			this.setState({users : response.data})				
-		});
+		userService.list()
+		.then(users => {
+			this.setState({users : users});
+		});	
 	}
 
 	loadContent = ()=>{
-		if(this.state.users.count < 1) {
-			return <tr><td colSpan="5">{this.state.loader}</td></tr>;
-		}else{
-			return this.state.users.map((user, i) => {
-				return <Row user={user} key={i} srno={i+1} refreshGrid={this.refreshGrid}/>
-			});
+		if(this.state.users){
+			if(this.state.users.count < 1) {
+				return <tr><td colSpan="5">{this.state.loader}</td></tr>;
+			}else{
+				return this.state.users.map((user, i) => {
+					return <Row user={user} key={i} srno={i+1} refreshGrid={this.refreshGrid}/>
+				});
+			}
 		}
 	}
 
@@ -47,14 +45,14 @@ export default class List extends Component {
 
 	render() {
 		return (
-			<div>
-				<div>
+			<div className="col-12">
+				<div className="">
 					<Link to="/add">
-						<button > Add User</button>
+						<button className="btn btn-info"> Add User</button>
 					</Link>
 					
 				</div>
-				<div>
+				<div >
 					<table border="1" width="100%">
 						<thead>
 							<tr>

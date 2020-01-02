@@ -1,4 +1,5 @@
 import Axios from 'axios';
+import loginService from '../Services/loginService';
 let config = {
     endpoint: 'http://localhost:4001'
 }
@@ -9,16 +10,18 @@ const axiosInstance = () => {
         /* other custom settings */
     });
     instance.interceptors.request.use(function (config) {
-        config.headers.Authorization = 'Bearer ' + localStorage.getItem('token');
+        config.headers.Authtoken = 'Bearer ' + localStorage.getItem('token');
         return config;
     });
     instance.interceptors.response.use(response => {
         return response;
-    }, error => {
+    }, 
+    error => {
         if (error.response.status === 401) {
-            //Service.logout()
+            loginService.logout();
+            return error;
         }
-        return error;
+        
     });
 
     return instance;
@@ -26,6 +29,6 @@ const axiosInstance = () => {
 
 
 export {
-    config,
+    config as default,
     axiosInstance
 }
