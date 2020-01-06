@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import config, {axiosInstance} from '../config/config';
-import logo from '../logo.svg';
+import config, {axiosInstance} from '../../config/config';
+import logo from '../../logo.svg';
 // import Axios from 'axios';
 
 

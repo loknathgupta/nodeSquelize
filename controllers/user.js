@@ -43,6 +43,7 @@ let controller = {
             password = bcrypt.hashSync(req.body.password, parseInt(process.env.BCRYPT_SALTROUNDS));
         }
         if(userId >= 1){
+            console.log('file', req.file);
             db.users.findByPk(userId)
             .then(user => {
                 let dataToUpdate = {
@@ -82,7 +83,7 @@ let controller = {
                 user.password = password;
             }
             if(req.file){
-                user.dp = req.file.filename;
+                user.dp = req.file.path;
             }
             user.save()
             .then(staus => {

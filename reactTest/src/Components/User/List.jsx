@@ -1,25 +1,35 @@
 import React, { Component } from "react";
 import {Link} from "react-router-dom";
-import logo from '../logo.svg';
+import logo from '../../logo.svg';
 import Row from './TableRow';
-import userService from '../Services/userService';
+import UserDeatils from '../UserDeatils';
+import userService from '../../Services/userService';
 
 export default class List extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			loader: <img src={logo} className="App-logo" alt="logo" />,
-			users : []
+			users : [],
+			hasError : false,
+			showPopup : false,
+			userSelected : false
 		}
 		this.refreshGrid = this.refreshGrid.bind(this);
+		this.showDetailPopup = this.showDetailPopup.bind(this);
 	}
 
 	
 
-	componentDidMount() {		
+	componentDidMount() {
+		console.log('List Did Mount');		
 		userService.list()
 		.then(users => {
-			this.setState({users : users});
+			if(users){
+				this.setState({users : users});
+			}else{
+				
+			}
 		});
 	}
 	refreshGrid = () => {
@@ -35,11 +45,28 @@ export default class List extends Component {
 				return <tr><td colSpan="5">{this.state.loader}</td></tr>;
 			}else{
 				return this.state.users.map((user, i) => {
-					return <Row user={user} key={i} srno={i+1} refreshGrid={this.refreshGrid}/>
+					return <Row user={user} key={i} srno={i+1} showDetailPopup={this.showDetailPopup} refreshGrid={this.refreshGrid}/>
 				});
 			}
 		}
 	}
+
+	showDetailPopup = (userId = false) => {
+		console.log('Now')
+		this.setState({
+			showPopup:true,
+			userSelected : userId
+		});
+	}
+
+	componentDidCatch(error, info) {
+		// Display fallback UI
+		this.setState({ hasError: true });
+		// You can also log the error to an error reporting service
+		//logErrorToMyService(error, info);
+		this.props.history.push('/login');
+	  }
+	 
 
 
 
@@ -47,6 +74,7 @@ export default class List extends Component {
 		return (
 			<div className="col-12">
 				<div className="">
+				
 					<Link to="/add">
 						<button className="btn btn-info"> Add User</button>
 					</Link>
@@ -67,12 +95,10 @@ export default class List extends Component {
 						</thead>
 						<tbody>
 							{this.loadContent()}
-						</tbody>
-						
-					</table>
-					
+						</tbody>						
+					</table>					
 				</div>
-				
+				<UserDeatils  show={this.state.showPopup} userSelected={this.state.userSelected}/>		
 			</div>
 		);
 	}

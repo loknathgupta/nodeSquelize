@@ -2,20 +2,20 @@ import React, { Component } from "react";
 // import Axios from 'axios';
 import { AvForm, AvField } from 'availity-reactstrap-validation';
 import { Button } from 'reactstrap';
-//import config, {axiosInstance} from '../config/config';
-import loginService from '../Services/loginService';
+import loginService from '../../Services/loginService';
 
 
 export default class List extends Component {
 	constructor(props) {
 		super(props);
-		//console.log(props);
+		console.log('props', props);
 		this.state = {
 			email:'',
 			password : null
 		}
 		this.handleSubmit = this.handleSubmit.bind(this);
 		//this.changeName = this.changeName.bind(this);
+		console.log(process.env);
 	}
 
 	handleSubmit = (event, err, values) => {
@@ -23,20 +23,13 @@ export default class List extends Component {
 			return false;
 		}
 		console.log(values)
-		//let formData = new FormData(document.getElementById('loginForm'));
-		// axiosInstance().post(config.endpoint+'/user/login', values)
-		// .then(response => {
-		// 	console.log(response)
-		// 	//if(response.status)
-		// 	localStorage.setItem('token', response.data.token);
-		// 	this.props.history.push('/list');
-		// });
 		loginService.login(values.email, values.password)
 		.then(responseData => {
 			console.log('response fg fgg', responseData);
 			if(responseData.status === 'success'){
 				this.props.history.push('/list');
 			}
+			//this.props.updateLoginState(responseData.status);
 		});
 	}
 	
@@ -46,7 +39,7 @@ export default class List extends Component {
 
 	render() {		
 		return (
-			<div className="col-3">
+			<div className="col-5">
 				<AvForm onSubmit={this.handleSubmit} id="loginForm">
 
 					<div className="form-group">

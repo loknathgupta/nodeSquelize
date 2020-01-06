@@ -13,14 +13,21 @@ const axiosInstance = () => {
         config.headers.Authtoken = 'Bearer ' + localStorage.getItem('token');
         return config;
     });
-    instance.interceptors.response.use(response => {
-        return response;
-    }, error => {
-        if (error.response.status === 401) {
-            loginService.logout()
+
+
+
+    instance.interceptors.response.use(
+        response => {
+            return response;
+        }, 
+        error => {
+            console.log(error.response);
+            if (error.response && error.response.status === 401) {
+                loginService.logout()
+            }
+            return error;
         }
-        return error;
-    });
+    );
 
     return instance;
 }

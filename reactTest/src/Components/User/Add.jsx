@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { AvForm, AvField } from 'availity-reactstrap-validation';
 import { Button } from 'reactstrap';
-import config, {axiosInstance} from '../config/config';
-import logo from '../logo.svg';
-import userService from '../Services/userService';
+import config, {axiosInstance} from '../../config/config';
+import logo from '../../logo.svg';
+import userService from '../../Services/userService';
 
 
 export default class List extends Component {

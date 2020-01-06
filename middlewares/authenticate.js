@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
-    console.log('req.headers', req.headers);
+    //console.log('req.headers', req.headers);
     const tokenHeader = req.headers.Authtoken || req.headers.authtoken;
     try {
         if (tokenHeader && (tokenHeader).split(' ')[0] === 'Bearer') {
@@ -13,7 +13,7 @@ module.exports = (req, res, next) => {
                         return res.status(401).send({ success: false, message: err.message });
                     }
                     if (decoded) {
-                        console.log(decoded)
+                        console.log('decoded', decoded)
                         res.locals.decodedToken = decoded.user;
                         next();
                     }

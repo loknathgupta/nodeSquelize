@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import config from '../config/config';
+import config from '../../config/config';
 import {Link} from "react-router-dom";
-import userService from '../Services/userService';
+import userService from '../../Services/userService';
 
 class TableRow extends Component {
 	
 	constructor(props) {
 		super(props);	
-		console.log(props);
+		console.log('props', props);
 		this.handleDelete = this.handleDelete.bind(this);
 	}
 
@@ -19,6 +19,11 @@ class TableRow extends Component {
 		.catch(err => {
 			console.log(err);
 		});
+	}
+
+	handleView = () => {
+		console.log('View');
+		this.props.showDetailPopup(this.props.user.id);
 	}
 
 	render() {
@@ -43,7 +48,8 @@ class TableRow extends Component {
 					<img height="30px" src={config.endpoint + '/' + this.props.user.dp} alt={this.props.user.name + ' Profile Picture'}></img>
 				</td>
 				<td>
-					<Link to={'/view/'+ this.props.user.id} className="btn btn-info" >View</Link>
+					{/* <Link to={'/view/'+ this.props.user.id} className="btn btn-info" >View</Link> */}
+					<button onClick={this.handleView} className="btn btn-danger">View</button>
 					|
 					<Link to={'/add/' + this.props.user.id}  className="btn btn-primary" >Edit</Link>
 					|

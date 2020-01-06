@@ -12,7 +12,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(express.static('public'))
-app.use(express.static('uploads/profile-pictures'))
+app.use('/uploads', express.static('uploads'))
 //ROUTES WILL GO HERE
 app.use('/', routers);
  

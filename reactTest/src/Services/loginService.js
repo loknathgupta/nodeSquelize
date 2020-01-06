@@ -17,7 +17,7 @@ const loginService = {
     },
     logout : () => {
         localStorage.removeItem('token');
-        window.location.replace('/login');
+        //window.location.replace('/login');
         //this.props.history.push('/list');
     }
 }

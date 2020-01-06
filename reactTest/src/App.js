@@ -8,74 +8,19 @@ import {
 } from "react-router-dom";
 // import logo from './logo.svg';
 import './App.css';
-import Hello from './Components/Hello';
-import UserList from './Components/List';
-import UserAdd from './Components/Add';
-import UserView from './Components/View';
-import UserLogin from './Components/Login';
-import loginService from './Services/loginService';
-
-function Dashboard() {
-	return (
-		<div>
-			<h2>Dashboard</h2>
-		</div>
-	);
-}
-let handleLogout = () => {
-	loginService.logout();
-}
-
-
+// import Hello from './Components/Hello';
+// import UserList from './Components/User/List';
+// import UserAdd from './Components/User/Add';
+// import UserView from './Components/User/View';
+// import UserLogin from './Components/Login/Login';
+// import UserLogout from './Components/Login/Logout';
+import Menus from './Components/Menus';
 
 function App() {
 	return (
 		<div className="App" >
 			
-			<Router>
-				<div>
-					<ul className="menuLinks">
-						<li>
-							<Link to="/list" className="btn btn-info">Home</Link>
-						</li>
-						<li>
-							<Link to="/about" className="btn btn-info">About</Link>
-						</li>
-						<li>
-							<Link to="/dashboard" className="btn btn-info">Dashboard</Link>
-						</li>
-						<li>
-							<Link to="/login" className="btn btn-info">Login</Link>
-						</li>
-						<li>
-							<button onClick={handleLogout} className="btn btn-danger">Logout</button>
-						</li>
-					</ul>
-
-					<hr />
-
-					{/*
-						A <Switch> looks through all its children <Route>
-						elements and renders the first one whose path
-						matches the current URL. Use a <Switch> any time
-						you have multiple routes, but you want only one
-						of them to render at a time
-					*/}
-					<Switch>
-						<Route exact path="/" component={UserList} />
-						<Route path="/about" component={Hello} />
-						<Route path="/dashboard" component={Dashboard} />
-
-						<Route path="/list">
-							<UserList />
-						</Route>
-
-						<Route path="/add/:id?" component={UserAdd} />
-						<Route path="/view/:id?" component={UserView} />
-						<Route path="/login" component={UserLogin} />
-					</Switch>
-				</div>
-			</Router>
+			<Menus />
 
 		</div>
 	);
