@@ -27,7 +27,8 @@ export default class List extends Component {
 		.then(responseData => {
 			console.log('response fg fgg', responseData);
 			if(responseData.status === 'success'){
-				this.props.history.push('/list');
+				//this.props.history.push('/list');
+				window.location.replace('/list');
 			}
 			//this.props.updateLoginState(responseData.status);
 		});

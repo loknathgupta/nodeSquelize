@@ -44,9 +44,9 @@ class UserDeatils extends React.Component {
     render() {
         return (
             <div>
-                <button className="button" onClick={this.openModal}>
+                {/* <button className="button" onClick={this.openModal}>
                     Controlled Popup
-                </button>
+                </button> */}
                 <Popup
                     open={this.state.open}
                     // closeOnDocumentClick
