@@ -14,7 +14,7 @@ module.exports = (req, res, next) => {
                     }
                     if (decoded) {
                         console.log('decoded', decoded)
-                        res.locals.decodedToken = decoded.user;
+                        res.locals.decodedToken = decoded;
                         next();
                     }
                 });

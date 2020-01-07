@@ -13,10 +13,12 @@ export default class List extends Component {
 			users : [],
 			hasError : false,
 			showPopup : false,
-			userSelected : false
+			userSelected : false,
+			isLoggedIn: (localStorage.getItem('token') ? true : false),
 		}
 		this.refreshGrid = this.refreshGrid.bind(this);
 		this.showDetailPopup = this.showDetailPopup.bind(this);
+		this.hideDetailPopup = this.hideDetailPopup.bind(this);
 	}
 
 	
@@ -52,10 +54,14 @@ export default class List extends Component {
 	}
 
 	showDetailPopup = (userId = false) => {
-		console.log('Now')
 		this.setState({
 			showPopup:true,
 			userSelected : userId
+		});
+	}
+	hideDetailPopup = () => {
+		this.setState({
+			showPopup:false
 		});
 	}
 
@@ -72,12 +78,13 @@ export default class List extends Component {
 
 	render() {
 		return (
-			<div className="col-12">
-				<div className="">
-				
-					<Link to="/add">
+			<div className="card card-plain">
+				<div >
+				{this.state.isLoggedIn &&
+					<Link className="float-right" to="/add">
 						<button className="btn btn-info"> Add User</button>
 					</Link>
+				}
 					
 				</div>
 				<div >
@@ -98,7 +105,7 @@ export default class List extends Component {
 						</tbody>						
 					</table>					
 				</div>
-				<UserDeatils  show={this.state.showPopup} userSelected={this.state.userSelected}/>		
+				<UserDeatils  show={this.state.showPopup} userSelected={this.state.userSelected} hideDetailPopup = {this.hideDetailPopup}/>		
 			</div>
 		);
 	}

@@ -1,25 +1,28 @@
 import React, { Component } from "react";
 import { AvForm, AvField } from 'availity-reactstrap-validation';
-import { Button } from 'reactstrap';
+//import { Button } from 'reactstrap';
 import config, {axiosInstance} from '../../config/config';
 import logo from '../../logo.svg';
 import userService from '../../Services/userService';
+import loginService from '../../Services/loginService';
 
 
 export default class List extends Component {
 	constructor(props) {
 		super(props);
-		console.log(props);
+		//console.log(props);
 		this.state = {
 			id : '',
 			name:'',
 			email:'',
 			password : null,
-			dp:logo
+			dp:logo,
+			errorMessage : false,
 		}
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		//this.changeName = this.changeName.bind(this);
+		loginService.authorize();
 	}
 
 	handleSubmit = (event, err, values) => {
@@ -31,8 +34,12 @@ export default class List extends Component {
 		let formData = new FormData(document.getElementById('addForm'));
 		axiosInstance().post(config.endpoint+'/user/add', formData)
 		.then(response => {
-			console.log(response.data)
-			this.props.history.push('/list');
+			//console.log(response.data.errors[0].message);
+			if(response.data.errors){
+				this.setState({errorMessage : response.data.errors[0].message});
+			}else{
+				this.props.history.push('/list');
+			}
 		});
 	}
 
@@ -42,12 +49,6 @@ export default class List extends Component {
 		})
 	}
 
-	// changeName = (event) => {
-	// 	this.setState({
-	// 		name : event.target.value
-	// 	});
-	// }
-
 	componentDidMount() {
 		// console.log(props);
 		let userId = this.props.match.params.id;
@@ -55,7 +56,7 @@ export default class List extends Component {
 			userService.list(userId)
 			.then(users => {
 				let userDetails = users[0];
-				console.log('userDetails', userDetails);
+				//console.log('userDetails', userDetails);
 				this.setState({
 					id : userDetails.id,
 					name : userDetails.name,
@@ -70,7 +71,10 @@ export default class List extends Component {
 
 	render() {		
 		return (
-			<div className="col-7">
+			<div className="card card-plain">
+				{this.state.errorMessage &&
+					<div className="error">{this.state.errorMessage}</div>
+				}
 				<AvForm onSubmit={this.handleSubmit} id="addForm">
 					<div className="form-group">
 						<label >Username</label>
@@ -90,13 +94,13 @@ export default class List extends Component {
 										
 					<div className="form-group">
 						<label >Profile Picture</label>
-						<AvField id="dp" name="dp" type="file" onChange={this.handleChange} validate={{required : {value: this.state.dp!== '' ? false :true}}}/>
+						<AvField id="dp" name="dp" type="file" onChange={this.handleChange} validate={{required : {value: this.state.dp !== logo ? false :true}}}/>
 						<img src={this.state.dp} width="30px" alt="Profile"/>
 					</div>
 					<div className="form-group">
 						<AvField type="hidden" name="id" value={this.state.id} />
-						{/* <button className="btn btn-primary">Save!</button> */}
-						<Button color="primary">Submit</Button>
+						<button className="btn btn-primary">Save!</button>
+						{/* <Button color="primary">Submit</Button> */}
 					</div>
 				</AvForm>
 			</div>

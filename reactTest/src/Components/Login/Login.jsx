@@ -11,7 +11,9 @@ export default class List extends Component {
 		console.log('props', props);
 		this.state = {
 			email:'',
-			password : null
+			password : null,
+			errorMessage : false,
+
 		}
 		this.handleSubmit = this.handleSubmit.bind(this);
 		//this.changeName = this.changeName.bind(this);
@@ -29,8 +31,12 @@ export default class List extends Component {
 			if(responseData.status === 'success'){
 				//this.props.history.push('/list');
 				window.location.replace('/list');
+			}else{
+				this.setState({errorMessage: responseData.message});
+				setTimeout(() => {
+					this.setState({errorMessage: false})
+				}, 3000)
 			}
-			//this.props.updateLoginState(responseData.status);
 		});
 	}
 	
@@ -41,6 +47,9 @@ export default class List extends Component {
 	render() {		
 		return (
 			<div className="col-5">
+				{this.state.errorMessage &&
+					<div className="error">{this.state.errorMessage}</div>
+				}
 				<AvForm onSubmit={this.handleSubmit} id="loginForm">
 
 					<div className="form-group">

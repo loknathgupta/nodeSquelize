@@ -9,6 +9,9 @@ class TableRow extends Component {
 		super(props);	
 		console.log('props', props);
 		this.handleDelete = this.handleDelete.bind(this);
+		this.state = {
+			isLoggedIn: (localStorage.getItem('token') ? true : false),
+		}
 	}
 
 	handleDelete = () => {
@@ -50,10 +53,14 @@ class TableRow extends Component {
 				<td>
 					{/* <Link to={'/view/'+ this.props.user.id} className="btn btn-info" >View</Link> */}
 					<button onClick={this.handleView} className="btn btn-danger">View</button>
-					|
-					<Link to={'/add/' + this.props.user.id}  className="btn btn-primary" >Edit</Link>
-					|
-					<button onClick={this.handleDelete} className="btn btn-danger">Delete</button>
+					
+					{this.state.isLoggedIn &&
+						<Link to={'/add/' + this.props.user.id}  className="btn btn-primary" >Edit</Link>
+					}
+					
+					{this.state.isLoggedIn &&
+						<button onClick={this.handleDelete} className="btn btn-danger">Delete</button>
+					}
 				</td>
 			</tr>
 		);

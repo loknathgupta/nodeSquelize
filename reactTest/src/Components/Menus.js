@@ -14,6 +14,7 @@ import UserAdd from './User/Add';
 import UserView from './User/View';
 import UserLogin from './Login/Login';
 import UserLogout from './Login/Logout';
+import ViewProfile from './User/ViewProfile'
 
 import loginService from '../Services/loginService';
 
@@ -28,10 +29,12 @@ export default class Menus extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			isLoggedIn: (localStorage.getItem('token') ? true : false)
+			isLoggedIn: (localStorage.getItem('token') ? true : false),
+			viewProfile :false
 		};
 		this.updateLoginState = this.updateLoginState.bind(this);
 		this.handleLogout = this.handleLogout.bind(this);
+		this.handleViewProfile = this.handleViewProfile.bind(this);
 	}
 
 	updateLoginState = (status = 'fail') => {
@@ -41,6 +44,11 @@ export default class Menus extends React.Component {
 			this.setState({ isLoggedIn: false });
 		}
 
+	}
+
+	handleViewProfile = () => {
+		//alert('handleViewProfile');
+		this.setState({ viewProfile: true });
 	}
 
 	handleLogout = () => {
@@ -71,6 +79,12 @@ export default class Menus extends React.Component {
 							{this.state.isLoggedIn !== true &&
 								<li>
 									<Link to={{ pathname: "/login" }} className="btn btn-info">Login</Link>
+								</li>
+							}
+
+							{this.state.isLoggedIn === true &&
+								<li>
+									<button onClick={this.handleViewProfile} className="btn btn-info"> View Profile</button>
 								</li>
 							}
 
@@ -108,6 +122,7 @@ export default class Menus extends React.Component {
 						</Switch>
 					</div>
 				</Router>
+				<ViewProfile view={this.state.viewProfile}/>
 			</div>
 		);
 	}

@@ -11,7 +11,7 @@ let controller = {
     login: (req, res, next) => {
         db.users.findOne({where:{email:req.body.email}})
         .then(user => {
-            if(bcrypt.compareSync(req.body.password, user.password)){
+            if(user && bcrypt.compareSync(req.body.password, user.password)){
                 let token = jwt.sign({email: user.email},
                     process.env.JWT_KEY,
                     { 

@@ -1,14 +1,14 @@
 import React from 'react';
 import Popup from "reactjs-popup";
-import config, {axiosInstance} from '../config/config';
+import config, {axiosInstance} from '../../config/config';
 
-class UserDeatils extends React.Component {
+class ViewProfile extends React.Component {
     constructor(props) {
         super(props);
-        console.log('popup props', props);
+        console.log('profile props', props);
 
         this.state = {
-            open : props.show,
+            open : false,
             userDetails : false
         };
         this.openModal = this.openModal.bind(this);
@@ -18,19 +18,22 @@ class UserDeatils extends React.Component {
     
     
     componentWillReceiveProps(props) {
-        console.log('popup nw props', props);
+        console.log('profile nw props', props);
         this.setState({
-            open : props.show
+            open : props.view
         });
-        if(props.userSelected){
-			axiosInstance().get(config.endpoint+'/user/list/'+props.userSelected)
-			.then(response => {
-                let userDetails = response.data[0];
-				this.setState({
-					userDetails : userDetails
-				});
-			});
-		}
+        //if(props.userSelected){
+        axiosInstance().get(config.endpoint+'/user/view-profile')
+        .then(response => {
+            let userDetails = response.data;
+            this.setState({
+                userDetails : userDetails
+            });
+        })
+        .catch(err => {
+            console.log(err);
+        });
+		//}
     }
 
     openModal() {
@@ -39,7 +42,6 @@ class UserDeatils extends React.Component {
     }
     closeModal() {
         this.setState({ open: false });
-        this.props.hideDetailPopup();
     }
 
     render() {
@@ -75,4 +77,4 @@ class UserDeatils extends React.Component {
     }
 }
 
-export default UserDeatils;
+export default ViewProfile;

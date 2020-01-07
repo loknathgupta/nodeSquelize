@@ -90,7 +90,8 @@ let controller = {
                 res.status(200).json(req.file);
             })
             .catch(err => {
-                res.status(500).json(err);
+                console.log(err);
+                res.status(200).json(err);
             });
         }
     },
@@ -161,6 +162,16 @@ let controller = {
                 }); 
             });            
         }
+    },
+
+    viewProfile : (req, res, next) => {
+        let conditions  = {email : res.locals.decodedToken.email};
+        db.users.findOne({
+            where : conditions
+        })
+        .then(users => {
+            res.status(200).json(users);
+        })
     }
 }
 module.exports = controller;

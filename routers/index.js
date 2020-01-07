@@ -9,7 +9,8 @@ const auth = require('../middlewares/authenticate')
 router.post('/user/login', loginController.login);
 
 router.post('/user/add', auth, userController.uploadDP.single('dp'), userController.add);
-router.get('/user/list/:id?', auth,userController.getList);
-router.post('/user/delete', userController.deleteUser);
+router.get('/user/list/:id?', userController.getList);
+router.post('/user/delete', auth, userController.deleteUser);
+router.get('/user/view-profile', auth, userController.viewProfile);
 
 module.exports = router;

@@ -19,6 +19,19 @@ const loginService = {
         localStorage.removeItem('token');
         window.location.replace('/login');
         //this.props.history.push('/list');
+    },
+    isLoggedIn : () => {
+        let loginStatus = (localStorage.getItem('token') ? true : false);
+        // if(!loginStatus){
+        //     window.location.replace('/login');
+        // }
+        return loginStatus;
+    },
+    authorize : () => {
+        let loginStatus = (localStorage.getItem('token') ? true : false);
+        if(!loginStatus){
+            window.location.replace('/login');
+        }
     }
 }
 export default loginService;

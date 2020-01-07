@@ -21,10 +21,13 @@ const axiosInstance = () => {
             return response;
         }, 
         error => {
-            console.log(error.response);
+            console.log('AJAX ERROR', error.response);
             if (error.response && error.response.status === 401) {
                 loginService.logout()
             }
+            // if (error.response && error.response.status === 404) {
+            //     loginService.logout()
+            // }
             return error;
         }
     );
