@@ -6,7 +6,6 @@ class ViewProfile extends React.Component {
     constructor(props) {
         super(props);
         console.log('profile props', props);
-
         this.state = {
             open : false,
             userDetails : false
