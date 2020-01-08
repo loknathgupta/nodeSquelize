@@ -1,4 +1,5 @@
 node_modules
-reactTest/node_modules
 package-lock.json
-uploads/profile-pictures
+server/node_modules
+server/uploads/profile-pictures
+client/node_modules
