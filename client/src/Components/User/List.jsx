@@ -2,8 +2,10 @@ import React, { Component } from "react";
 import {Link} from "react-router-dom";
 import logo from '../../logo.svg';
 import Row from './TableRow';
-import UserDeatils from '../UserDeatils';
 import userService from '../../Services/userService';
+
+import Pagination from "react-pagination-library";
+import "react-pagination-library/build/css/index.css"; //for css
 
 export default class List extends Component {
 	constructor(props) {
@@ -15,12 +17,22 @@ export default class List extends Component {
 			showPopup : false,
 			userSelected : false,
 			isLoggedIn: (localStorage.getItem('token') ? true : false),
+			parPage : 3,
+			currentPage : 1,
+			totalPages : 10
 		}
 		this.refreshGrid = this.refreshGrid.bind(this);
 		this.showDetailPopup = this.showDetailPopup.bind(this);
 		this.hideDetailPopup = this.hideDetailPopup.bind(this);
+
+		this.changeCurrentPage = this.changeCurrentPage.bind(this);
 	}
 
+	changeCurrentPage = (numPage) => {
+		this.setState({ currentPage: numPage });
+		//fetch a data
+		//or update a query to get data
+	  };
 	
 
 	componentDidMount() {
@@ -29,6 +41,7 @@ export default class List extends Component {
 		.then(users => {
 			if(users){
 				this.setState({users : users});
+				this.setState({totalPages : Math.ceil(users.length / this.state.parPage)});
 			}else{
 				
 			}
@@ -46,8 +59,21 @@ export default class List extends Component {
 			if(this.state.users.count < 1) {
 				return <tr><td colSpan="5">{this.state.loader}</td></tr>;
 			}else{
+				let rowCounter = 0;
+				let srno = 0;
 				return this.state.users.map((user, i) => {
-					return <Row user={user} key={i} srno={i+1} showDetailPopup={this.showDetailPopup} refreshGrid={this.refreshGrid}/>
+					rowCounter++;
+					if(rowCounter <= (this.state.parPage * this.state.currentPage - this.state.parPage)){
+						return false; 
+					}
+					if(rowCounter <= this.state.parPage * this.state.currentPage){
+						if(srno === 0){
+							srno  = (this.state.parPage * this.state.currentPage) -this.state.parPage + 1;
+						}else{
+							srno++;
+						}
+						return <Row user={user} key={rowCounter-1} srno={srno} showDetailPopup={this.showDetailPopup} refreshGrid={this.refreshGrid} />
+					}
 				});
 			}
 		}
@@ -105,7 +131,15 @@ export default class List extends Component {
 						</tbody>						
 					</table>					
 				</div>
-				<UserDeatils  show={this.state.showPopup} userSelected={this.state.userSelected} hideDetailPopup = {this.hideDetailPopup}/>		
+				<div>
+					<Pagination
+					currentPage={this.state.currentPage}
+					totalPages={this.state.totalPages}
+					changeCurrentPage={this.changeCurrentPage}
+					theme="bottom-border"
+					/>
+					<h2>current Page:{this.state.currentPage}</h2>
+				</div>
 			</div>
 		);
 	}

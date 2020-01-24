@@ -14,7 +14,8 @@ import UserAdd from './User/Add';
 import UserView from './User/View';
 import UserLogin from './Login/Login';
 import UserLogout from './Login/Logout';
-import ViewProfile from './User/ViewProfile'
+import ViewProfile from './User/ViewProfile';
+import AddComment from './User/AddComment'
 
 import loginService from '../Services/loginService';
 
@@ -30,25 +31,10 @@ export default class Menus extends React.Component {
 		super(props);
 		this.state = {
 			isLoggedIn: (localStorage.getItem('token') ? true : false),
-			viewProfile :false
+			viewProfile :false,
+			addComment : false
 		};
-		this.updateLoginState = this.updateLoginState.bind(this);
 		this.handleLogout = this.handleLogout.bind(this);
-		this.handleViewProfile = this.handleViewProfile.bind(this);
-	}
-
-	updateLoginState = (status = 'fail') => {
-		if (status === 'success') {
-			this.setState({ isLoggedIn: true });
-		} else {
-			this.setState({ isLoggedIn: false });
-		}
-
-	}
-
-	handleViewProfile = () => {
-		//alert('handleViewProfile');
-		this.setState({ viewProfile: true });
 	}
 
 	handleLogout = () => {
@@ -56,6 +42,7 @@ export default class Menus extends React.Component {
 	}
 
 	render() {
+		// alert('menu')
 		return (
 			<div >
 				<Router>
@@ -84,7 +71,14 @@ export default class Menus extends React.Component {
 
 							{this.state.isLoggedIn === true &&
 								<li>
-									<button onClick={this.handleViewProfile} className="btn btn-info"> View Profile</button>
+									<ViewProfile view={this.state.viewProfile} closeProfile={this.handleViewProfile}/>
+								</li>
+							}
+
+							{this.state.isLoggedIn === true &&
+								<li>
+									{/* <Link to="/logout" className="btn btn-info">Logout</Link> */}
+									<AddComment view={this.state.addComment} closeComment = {this.handleAddComment}/>
 								</li>
 							}
 
@@ -94,6 +88,7 @@ export default class Menus extends React.Component {
 									<button onClick={this.handleLogout} className="btn btn-info"> Logout</button>
 								</li>
 							}
+
 
 						</ul>
 
@@ -122,7 +117,6 @@ export default class Menus extends React.Component {
 						</Switch>
 					</div>
 				</Router>
-				<ViewProfile view={this.state.viewProfile}/>
 			</div>
 		);
 	}

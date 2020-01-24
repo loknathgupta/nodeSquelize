@@ -1,5 +1,5 @@
 import React from 'react';
-import Popup from "reactjs-popup";
+import Modal from 'react-responsive-modal';
 import config, {axiosInstance} from '../../config/config';
 
 class ViewProfile extends React.Component {
@@ -10,18 +10,10 @@ class ViewProfile extends React.Component {
             open : false,
             userDetails : false
         };
-        this.openModal = this.openModal.bind(this);
-        this.closeModal = this.closeModal.bind(this);
-
-    }
+        this.toggleModal = this.toggleModal.bind(this);
+    }    
     
-    
-    componentWillReceiveProps(props) {
-        console.log('profile nw props', props);
-        this.setState({
-            open : props.view
-        });
-        //if(props.userSelected){
+    componentDidMount() {        
         axiosInstance().get(config.endpoint+'/user/view-profile')
         .then(response => {
             let userDetails = response.data;
@@ -30,47 +22,42 @@ class ViewProfile extends React.Component {
             });
         })
         .catch(err => {
-            console.log(err);
+            this.props.history.push('/');
         });
-		//}
     }
 
-    openModal() {
-        this.setState({ open: true });
-        console.log(document.body);
-    }
-    closeModal() {
-        this.setState({ open: false });
+    toggleModal = () => {
+        this.setState({ open: !this.state.open });
     }
 
     render() {
         return (
             <div>
-                {/* <button className="button" onClick={this.openModal}>
-                    Controlled Popup
-                </button> */}
-                <Popup
+                <button className="btn btn-info" onClick={this.toggleModal}>View Profile</button>      
+
+                <Modal
                     open={this.state.open}
-                    // closeOnDocumentClick
-                    onClose={this.closeModal}
+                    onClose={this.toggleModal}
+                    closeOnEsc = {false}
+                    closeOnOverlayClick = {false}
                 >
                     <div className="modalf">
-                        <span className="close" onClick={this.closeModal}>
+                        <span className="close" onClick={this.toggleModal}>
                             &times;
                         </span>
-                    <div className="popupBody" id="popupBody">
-                        {this.state.userDetails &&
-                            <div> 
-                                <div><img height="60px" src={config.endpoint + '/' + this.state.userDetails.dp} alt={this.state.userDetails.name + ' Profile Picture'}></img></div>
-                                <div><b>User Name : </b> {this.state.userDetails.name}</div>
-                                <div><b>User Email : </b> {this.state.userDetails.email}</div>
-                                <div><b>Status : </b> {this.state.userDetails.status === 'E' ? 'Enabled' : (this.state.userDetails.status === 'B' ? 'Blocked' : 'Disabled')}</div>
-                            </div>
-                        }
-                    </div>
+                        <div className="popupBody" id="popupBody">
+                            {this.state.userDetails &&
+                                <div> 
+                                    <div><img height="60px" src={config.endpoint + '/' + this.state.userDetails.dp} alt={this.state.userDetails.name + ' Profile Picture'}></img></div>
+                                    <div><b>User Name : </b> {this.state.userDetails.name}</div>
+                                    <div><b>User Email : </b> {this.state.userDetails.email}</div>
+                                    <div><b>Status : </b> {this.state.userDetails.status === 'E' ? 'Enabled' : (this.state.userDetails.status === 'B' ? 'Blocked' : 'Disabled')}</div>
+                                </div>
+                            }
+                        </div>
                         
-            </div>
-                </Popup>
+                    </div>
+                </Modal>
             </div>
         );
     }

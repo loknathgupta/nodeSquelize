@@ -12,5 +12,6 @@ router.post('/user/add', auth, userController.uploadDP.single('dp'), userControl
 router.get('/user/list/:id?', userController.getList);
 router.post('/user/delete', auth, userController.deleteUser);
 router.get('/user/view-profile', auth, userController.viewProfile);
+router.post('/user/add-comment', auth, userController.addComment);
 
 module.exports = router;

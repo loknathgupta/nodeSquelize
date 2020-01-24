@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import config from '../../config/config';
 import {Link} from "react-router-dom";
+import UserDeatils from './UserDeatils';
+import UserComments from './UserComments';
 import userService from '../../Services/userService';
 
 class TableRow extends Component {
@@ -52,16 +54,19 @@ class TableRow extends Component {
 				</td>
 				<td>
 					{/* <Link to={'/view/'+ this.props.user.id} className="btn btn-info" >View</Link> */}
-					<button onClick={this.handleView} className="btn btn-danger">View</button>
+					<UserDeatils  userId={this.props.user.id} />		
+					<UserComments  comments={this.props.user.comments} />		
+
 					
 					{this.state.isLoggedIn &&
-						<Link to={'/add/' + this.props.user.id}  className="btn btn-primary" >Edit</Link>
+						<div class="float-left"><Link to={'/add/' + this.props.user.id}  className="btn btn-primary" >Edit</Link></div>
 					}
 					
 					{this.state.isLoggedIn &&
-						<button onClick={this.handleDelete} className="btn btn-danger">Delete</button>
+						<button onClick={this.handleDelete} className="btn btn-danger float-left">Delete</button>
 					}
 				</td>
+
 			</tr>
 		);
 	}

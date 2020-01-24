@@ -12,11 +12,20 @@ const userService = {
                 console.log(err);
                 reject(err);
             });
-        })
-        
+        });        
     },
-    add : () => {
-
+    add : (formData) => {
+        return new Promise((resolve, reject) =>{
+            axiosInstance().post(config.endpoint+'/user/add', formData)
+            .then(response => {
+                //console.log(response.data.errors[0].message);
+                resolve(response.data);                
+            })
+            .catch(err => {
+                console.log(err);
+                reject(err);
+            });
+        });
     },
     edit : () => {
 
@@ -34,6 +43,19 @@ const userService = {
             });
         });
         
-    }
+    },
+    addComment : (formData) => {
+        return new Promise((resolve, reject) =>{
+            console.log('formData', formData);
+            axiosInstance().post(config.endpoint+'/user/add-comment', formData)
+            .then(response => {
+                resolve(response.data);                
+            })
+            .catch(err => {
+                console.log(err);
+                reject(err);
+            });
+        });
+    },
 }
 export default userService;

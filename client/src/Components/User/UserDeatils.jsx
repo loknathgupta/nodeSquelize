@@ -1,6 +1,6 @@
 import React from 'react';
-import Popup from "reactjs-popup";
-import config, {axiosInstance} from '../config/config';
+import Modal from 'react-responsive-modal';
+import config, {axiosInstance} from '../../config/config';
 
 class UserDeatils extends React.Component {
     constructor(props) {
@@ -8,53 +8,39 @@ class UserDeatils extends React.Component {
         console.log('popup props', props);
 
         this.state = {
-            open : props.show,
+            open : false,
             userDetails : false
         };
-        this.openModal = this.openModal.bind(this);
-        this.closeModal = this.closeModal.bind(this);
-
+        this.toggleModal = this.toggleModal.bind(this);
     }
     
     
-    componentWillReceiveProps(props) {
-        console.log('popup nw props', props);
-        this.setState({
-            open : props.show
+    componentDidMount() {        
+        axiosInstance().get(config.endpoint+'/user/list/'+this.props.userId)
+        .then(response => {
+            let userDetails = response.data[0];
+            this.setState({
+                userDetails : userDetails
+            });
         });
-        if(props.userSelected){
-			axiosInstance().get(config.endpoint+'/user/list/'+props.userSelected)
-			.then(response => {
-                let userDetails = response.data[0];
-				this.setState({
-					userDetails : userDetails
-				});
-			});
-		}
     }
-
-    openModal() {
-        this.setState({ open: true });
-        console.log(document.body);
-    }
-    closeModal() {
-        this.setState({ open: false });
-        this.props.hideDetailPopup();
+    
+    toggleModal = () => {
+        this.setState({ open: !this.state.open });
     }
 
     render() {
         return (
-            <div>
-                {/* <button className="button" onClick={this.openModal}>
-                    Controlled Popup
-                </button> */}
-                <Popup
+            <div className="float-left">
+                <button className="btn btn-danger" onClick={this.toggleModal}> View </button>
+                <Modal
                     open={this.state.open}
-                    // closeOnDocumentClick
-                    onClose={this.closeModal}
+                    onClose={this.toggleModal}
+                    closeOnEsc = {false}
+                    closeOnOverlayClick = {false}
                 >
                     <div className="modalf">
-                        <span className="close" onClick={this.closeModal}>
+                        <span className="close" onClick={this.toggleModal}>
                             &times;
                         </span>
                     <div className="popupBody" id="popupBody">
@@ -68,8 +54,8 @@ class UserDeatils extends React.Component {
                         }
                     </div>
                         
-            </div>
-                </Popup>
+                    </div>
+                </Modal>
             </div>
         );
     }

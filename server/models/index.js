@@ -34,7 +34,7 @@ Object.keys(db).forEach(modelName => {
     db[modelName].associate(db);
   }
 });
-//console.log(db);
+console.log(db);
 // db.comments.sync()
 // .then(data => console.log(data))
 // .catch(err => console.log(err));

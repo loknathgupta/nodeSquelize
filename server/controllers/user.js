@@ -30,9 +30,14 @@ let controller = {
         }
         //console.log(conditions);
         db.users.findAll({
-            where : conditions
+            where : conditions,
+            include: [{
+                model: db.comments
+            }],
+            //order: [ [ { model: db.comments}, 'createdAt', 'DESC' ] ]
         })
         .then(users => {
+            console.log('comments', users[0].comments);
             res.status(200).json(users);
         })
     },
@@ -102,7 +107,7 @@ let controller = {
                 let token = jwt.sign({email: user.email},
                     process.env.JWT_KEY,
                     { 
-                        expiresIn: '24h' // expires in 24 hours
+                        expiresIn: '12h' // expires in 24 hours
                     }
                 );
 
@@ -172,6 +177,21 @@ let controller = {
         .then(users => {
             res.status(200).json(users);
         })
+    },
+    addComment: (req, res, next) => { 
+        console.log(res.locals);       
+        let comment = new db.comments();            
+        comment.comment = req.body.comment;
+        comment.user_id = res.locals.decodedToken.userId;
+        
+        comment.save()
+        .then(staus => {
+            res.status(200).json(staus);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(200).json(err);
+        });
     }
 }
 module.exports = controller;

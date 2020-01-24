@@ -1,25 +1,13 @@
 {
-  "name": "app",
+  "name": "clarituscore-react",
   "version": "1.0.0",
-  "description": "Testz",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "client": "cd client && npm start",
     "server": "cd server && npm start",
-    "start": "concurrently \"npm run server\" \"npm run client\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "client": "cd client && npm start",
+    "start": "concurrently \"npm run server\" \"npm run client\""
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/loknathgupta/nodeSquelize.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/loknathgupta/nodeSquelize/issues"
-  },
-  "homepage": "https://github.com/loknathgupta/nodeSquelize#readme",
-  "dependencies": {
-    "concurrently": "^5.0.2"
-  }
+  "keywords": [],
+  "author": "Loknath"
 }

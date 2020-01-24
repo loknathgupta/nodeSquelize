@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { AvForm, AvField } from 'availity-reactstrap-validation';
+import _debounce from 'lodash.debounce';
 //import { Button } from 'reactstrap';
-import config, {axiosInstance} from '../../config/config';
+import config  from '../../config/config';
 import logo from '../../logo.svg';
 import userService from '../../Services/userService';
 import loginService from '../../Services/loginService';
@@ -16,30 +17,37 @@ export default class List extends Component {
 			name:'',
 			email:'',
 			password : null,
+			password_confirm : null,
 			dp:logo,
 			errorMessage : false,
 		}
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
-		//this.changeName = this.changeName.bind(this);
+		this.confirmPassword = this.confirmPassword.bind(this);
 		loginService.authorize();
 	}
 
 	handleSubmit = (event, err, values) => {
-		//event.preventDefault();
-		// console.log(values);
+		console.log(values); 
+		if(values.password !== values.password_confirm){
+			alert('Password are not same.');
+			alert(document.getElementById('password_confirm').className);
+			return false;
+		}
 		if(err.length > 0){		
 			return false;
 		}
 		let formData = new FormData(document.getElementById('addForm'));
-		axiosInstance().post(config.endpoint+'/user/add', formData)
-		.then(response => {
-			//console.log(response.data.errors[0].message);
-			if(response.data.errors){
-				this.setState({errorMessage : response.data.errors[0].message});
+		userService.add(formData)
+		.then(data => {
+			if(data.errors){
+				this.setState({errorMessage : data.errors[0].message});
 			}else{
 				this.props.history.push('/list');
 			}
+		})
+		.catch(err => {
+			console.log(err);
 		});
 	}
 
@@ -69,6 +77,21 @@ export default class List extends Component {
 		
 	}
 
+	// debounce to not pound the 'server'
+	confirmPassword = _debounce((value, ctx, input, cb) => {
+		// cancel pending 'network call'
+		// 	clearTimeout(this.timeout);
+		
+		// 	// simulate network call
+		// 	this.timeout = setTimeout(() => {
+		// 	  cb(value === 'valid' || value === '');
+		// 	}, 500);
+		
+		//   }, 300);
+		let password = document.getElementById('password').value;
+		cb((value === password || value === '')?true : 'Password does not match.');
+	});
+
 	render() {		
 		return (
 			<div className="card card-plain">
@@ -83,12 +106,19 @@ export default class List extends Component {
 
 					<div className="form-group">
 						<label >User Email-Id</label>
-						<AvField id="email" name="email" type="text" value={this.state.email}  validate={{required : {value:true}}}/>
+						<AvField id="email" name="email" type="text" value={this.state.email}  validate={{required : {value:true}, email:{value:true, errorMessage :'Not a valid email-id.'}}}/>
 					</div>
 					{ this.state.password === null &&
 						<div className="form-group">
 							<label >Password</label>
-							<AvField id="password" name="password" type="text" value={this.state.password}  validate={{required : {value:true}}}/>
+							<AvField id="password" name="password" type="password" value={this.state.password}  validate={{required : {value:true}}}/>
+						</div>
+					}
+
+					{ this.state.password === null &&
+						<div className="form-group">
+							<label >Confirm Password</label>
+							<AvField id="password_confirm" name="password_confirm" type="password" value={this.state.password_confirm} validate={{async: this.confirmPassword}} />
 						</div>
 					}
 										
