@@ -12,6 +12,7 @@ export default class List extends Component {
 		super(props);
 		this.state = {
 			loader: <img src={logo} className="App-logo" alt="logo" />,
+			allUsers : [],
 			users : [],
 			hasError : false,
 			showPopup : false,
@@ -19,7 +20,10 @@ export default class List extends Component {
 			isLoggedIn: (localStorage.getItem('token') ? true : false),
 			parPage : 3,
 			currentPage : 1,
-			totalPages : 10
+			totalPages : 10,
+			sortOrder : 1,
+			sortBy : 'id',
+			searchBy : ''
 		}
 		this.refreshGrid = this.refreshGrid.bind(this);
 		this.showDetailPopup = this.showDetailPopup.bind(this);
@@ -40,8 +44,11 @@ export default class List extends Component {
 		userService.list()
 		.then(users => {
 			if(users){
-				this.setState({users : users});
-				this.setState({totalPages : Math.ceil(users.length / this.state.parPage)});
+				this.setState({
+					allUsers : users,
+					users : users,
+					totalPages : Math.ceil(users.length / this.state.parPage)
+				});
 			}else{
 				
 			}
@@ -50,7 +57,21 @@ export default class List extends Component {
 	refreshGrid = () => {
 		userService.list()
 		.then(users => {
-			this.setState({users : users});
+			//this.setState({users : users});
+			if(users){
+				let totalPages = Math.ceil(users.length / this.state.parPage);
+				let activePage = this.state.currentPage;
+				if(activePage > totalPages){
+					activePage = activePage -1;
+				}
+				this.setState({
+					users : users,
+					totalPages : Math.ceil(users.length / this.state.parPage),
+					currentPage : activePage
+				});
+			}else{
+				
+			}
 		});	
 	}
 
@@ -97,7 +118,60 @@ export default class List extends Component {
 		// You can also log the error to an error reporting service
 		//logErrorToMyService(error, info);
 		this.props.history.push('/login');
-	  }
+	}
+
+
+	sortGrid = (e, sortBy) => {
+		let order = this.state.sortOrder;
+		if(this.state.sortBy !== sortBy){
+			order = 1;
+		}else{
+			order = -(order);
+		}
+		this.state.users.sort((a, b) => {
+			let val1 = a[sortBy];
+			let val2 = b[sortBy];
+			if(typeof a[sortBy] === 'string'){
+				val1 = val1.toUpperCase();
+				val2 = val2.toUpperCase();
+			}
+			if(val1 > val2){
+				return 1*order;
+			}else if(val1 < val2){
+				return -1*order;
+			}
+		});
+		this.setState({
+			users : this.state.users,
+			sortBy : sortBy,
+			sortOrder : order
+		});
+	}
+	searchInGrid = (e) => {
+		let searchedKey = e.target.value;
+
+		let matchedUsers = this.state.allUsers.filter(user => {
+			return (
+				user.name.indexOf(searchedKey) !== -1 
+				|| user.email.indexOf(searchedKey) !== -1
+				|| user.id.toString().indexOf(searchedKey) !== -1 
+			)
+		});
+		let totalPages = Math.ceil(matchedUsers.length / this.state.parPage);
+		let activePage = this.state.currentPage;
+		if(activePage > totalPages){
+			activePage = activePage -1;
+		}
+		if(totalPages > 0 && activePage === 0){
+			activePage = 1;
+		}
+		this.setState({
+			searchBy : searchedKey,
+			users : matchedUsers,
+			totalPages : Math.ceil(matchedUsers.length / this.state.parPage),
+			currentPage : activePage
+		});
+	}
 	 
 
 
@@ -114,14 +188,30 @@ export default class List extends Component {
 					
 				</div>
 				<div >
+					<div className="float-left">
+						<label><b>Search :</b></label>
+						<input type="text" value={this.state.searchBy} onChange={(e) => this.searchInGrid(e)}/>
+					</div>
 					<table border="1" width="100%">
 						<thead>
 							<tr>
 							<th>Sr. No</th>
-							<th>Id</th>
-							<th>Name</th>
-							<th>Email</th>
-							<th>Status</th>
+							<th  onClick={ (e) => this.sortGrid(e, 'id')}>
+								Id
+								{this.state.sortBy === 'id' ?<div>{this.state.sortOrder}</div> :''}
+							</th>
+							<th  onClick={ (e) => this.sortGrid(e, 'name')}>
+								Name
+								{this.state.sortBy === 'name' ?<div>{this.state.sortOrder}</div> :''}
+							</th>
+							<th  onClick={ (e) => this.sortGrid(e, 'email')}>
+								Email
+								{this.state.sortBy === 'email' ?<div>{this.state.sortOrder}</div> :''}
+							</th>
+							<th  onClick={ (e) => this.sortGrid(e, 'status')}>
+								Status
+								{this.state.sortBy === 'status' ?<div>{this.state.sortOrder}</div> :''}
+							</th>
 							<th>DP</th>
 							<th>Action</th>
 							</tr>

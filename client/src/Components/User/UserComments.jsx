@@ -4,6 +4,7 @@ import EachComment from './EachComment';
 
 class UserComments extends React.Component {
     constructor(props) {
+        // console.log('props dddd', props);
         super(props);
         this.state = {
             open : false,
@@ -32,7 +33,7 @@ class UserComments extends React.Component {
                         </span>
                         <div className="popupBody" id="popupBody">
                             <h4>Comments</h4>
-                            { this.state.comments.lentgh > 0 ?
+                            { this.state.comments.length > 0 ?
                             (this.state.comments.map((comment, i)=> <EachComment key={i} comment={comment}/>))
                             : <div>No Comments yet.</div>
                             }
@@ -45,4 +46,4 @@ class UserComments extends React.Component {
     }
 }
 
-export default UserComments;
+export {UserComments as default};

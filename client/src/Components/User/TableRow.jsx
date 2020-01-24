@@ -55,11 +55,11 @@ class TableRow extends Component {
 				<td>
 					{/* <Link to={'/view/'+ this.props.user.id} className="btn btn-info" >View</Link> */}
 					<UserDeatils  userId={this.props.user.id} />		
-					<UserComments  comments={this.props.user.comments} />		
+					<UserComments  comments={this.props.user.comments}   />		
 
 					
 					{this.state.isLoggedIn &&
-						<div class="float-left"><Link to={'/add/' + this.props.user.id}  className="btn btn-primary" >Edit</Link></div>
+						<div className="float-left"><Link to={'/add/' + this.props.user.id}  className="btn btn-primary" >Edit</Link></div>
 					}
 					
 					{this.state.isLoggedIn &&

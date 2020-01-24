@@ -29,7 +29,8 @@ class AddComment extends React.Component {
 			if(data.errors){
 				this.setState({errorMessage : data.errors[0].message});
 			}else{
-				this.toggleModal();
+                this.toggleModal();
+                this.props.history.push('/list');
 			}
 		})
 		.catch(err => {
