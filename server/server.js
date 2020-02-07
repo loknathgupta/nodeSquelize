@@ -5,6 +5,7 @@ const cors = require('cors');
 const db =  require('./models/');
 const routers =  require('./routers');
 require('dotenv').config();
+const mongo = require('./models/mongo/connection');
  
 //CREATE EXPRESS APP
 const app = express();
@@ -15,11 +16,14 @@ app.use(express.static('public'))
 app.use('/uploads', express.static('uploads'))
 //ROUTES WILL GO HERE
 app.use('/', routers);
- 
-app.listen(4001, () => {
-    console.log('Server started on port 4001');
-    // db.users.findAll()
-    // .then(users => {
-    //     //console.log('users', users);
-    // })
-});
+
+mongo.connectDB()
+.then(status => {
+    app.listen(4001, () => {
+        console.log('Server started on port 4001');
+        // db.users.findAll()
+        // .then(users => {
+        //     //console.log('users', users);
+        // })
+    });
+})

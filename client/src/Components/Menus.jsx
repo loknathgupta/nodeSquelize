@@ -9,7 +9,8 @@ import {
 // import logo from './logo.svg';
 import '../App.css';
 import Hello from './Hello';
-import UserList from './User/List';
+//import UserList from './User/List';
+import UserList from './User/ListTable';
 import UserAdd from './User/Add';
 import UserView from './User/View';
 import UserLogin from './Login/Login';

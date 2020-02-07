@@ -1,6 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const db = require('../models');
+const userMongoController = require('./mongo/usersController');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
@@ -22,8 +23,7 @@ var upload = multer({ storage: storage });
 let controller = {
     uploadDP: upload,
 
-    getList: (req, res, next) => {
-        //console.log(process.env.BCRYPT_SALTROUNDS);
+    getList: (req, res, next) => {        
         let conditions = {};
         if(req.params.id > 0){
             conditions['id'] = req.params.id;
@@ -37,7 +37,7 @@ let controller = {
             //order: [ [ { model: db.comments}, 'createdAt', 'DESC' ] ]
         })
         .then(users => {
-            console.log('comments', users[0].comments);
+            //console.log('comments', users[0].comments);
             res.status(200).json(users);
         })
     },
@@ -68,12 +68,17 @@ let controller = {
                     }
                     dataToUpdate.dp = req.file.path;
                 }
-                console.log('dataToUpdate', dataToUpdate);
                 user.update(dataToUpdate)
                 .then(updatedUser => {
-                    res.status(200).json(updatedUser);
-                })
-                
+                    userMongoController.addUser(user.dataValues)
+                    .then(status => {
+                        res.status(200).json(req.file);
+                    })
+                    .catch(err => {
+                        console.log('err', err);
+                        res.status(500).json(err);
+                    });
+                });
             })
             .catch(err => {
                 console.log('err', err);
@@ -92,7 +97,15 @@ let controller = {
             }
             user.save()
             .then(staus => {
-                res.status(200).json(req.file);
+                userMongoController.addUser(user.dataValues)
+                .then(status => {
+                    res.status(200).json(req.file);
+                })
+                .catch(err => {
+                    console.log(err);
+                    res.status(200).json(err);
+                });
+                
             })
             .catch(err => {
                 console.log(err);
@@ -152,14 +165,26 @@ let controller = {
     },
 
     deleteUser : (req, res, next) => {
+        
         let userId = req.body.id;
         if(userId >=1){
             db.users.destroy({where: {id:userId}})
             .then(user => {
-                res.status(200).json({
-                    status:'success', 
-                    user
-                });                
+                console.log('sdfdsfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfd');
+                userMongoController.deleteUser(userId)
+                .then(status => {
+                    console.log('YYYYYYYYYYYYYYYY', status);
+                    res.status(200).json({
+                        status:'success', 
+                        user
+                    });  
+                })
+                .catch(err => {
+                    res.status(200).json({
+                        status:'error', 
+                    }); 
+                });  
+                              
             })
             .catch(err => {
                 res.status(200).json({
