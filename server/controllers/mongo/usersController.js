@@ -21,7 +21,7 @@ let addUser = userData => {
     });
 }
 
-deleteUser = userId => {
+let deleteUser = userId => {
     console.log('Delete User Mongo Called');
     return new Promise((resolve, reject) => {
         userModel.deleteMany({id : userId})

@@ -187,7 +187,7 @@ let controller = {
         if(userId >=1){
             db.users.destroy({where: {id:userId}})
             .then(user => {
-                console.log('sdfdsfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfd');
+                console.log('UserDeleted');
                 userMongoController.deleteUser(userId)
                 .then(status => {
                     console.log('YYYYYYYYYYYYYYYY', status);

@@ -9,5 +9,8 @@
     "start": "concurrently \"npm run server\" \"npm run client\""
   },
   "keywords": [],
-  "author": "Loknath"
+  "author": "Loknath",
+  "dependencies": {
+    "concurrently": "^5.2.0"
+  }
 }
