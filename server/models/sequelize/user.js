@@ -8,15 +8,20 @@ module.exports = (sequelize, dataType) => {
         name: dataType.STRING,
         email: {
             type: dataType.STRING,
+            allowNull: false,
             unique :true
         },
-        password: dataType.STRING,
+        password: {
+            type: dataType.STRING,
+            allowNull: false,
+        },
         dp:{
             type: dataType.STRING(500),
             comment :'The profile picture'
         },
         status: {
             type:   dataType.ENUM,
+            allowNull: false,
             values: ['E', 'D', 'B']
         }
     });

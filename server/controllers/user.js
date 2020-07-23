@@ -1,6 +1,6 @@
 const express = require('express');
 const multer = require('multer');
-const db = require('../models');
+const db = require('../models/sequelize');
 const userMongoController = require('./mongo/usersController');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -8,7 +8,7 @@ const fs = require('fs');
 
 // SET STORAGE
 var storage = multer.diskStorage({
-    destination: function (req, file, cb) {
+    destination: function (req, file, cb) {        
         cb(null, 'uploads/profile-pictures')
     },
     filename: function (req, file, cb) {
@@ -53,10 +53,10 @@ let controller = {
             .then(user => {
                 let dataToUpdate = {
                     name : req.body.username,
-                    email : req.body.email,
+                    // email : req.body.email,
                 }
                 if(password !== null){
-                    dataToUpdate.password = password;
+                    // dataToUpdate.password = password;
                 }
                 if(req.file){
                     let filePath = 'uploads/profile-pictures/'+user.dp;
@@ -72,17 +72,26 @@ let controller = {
                 .then(updatedUser => {
                     userMongoController.addUser(user.dataValues)
                     .then(status => {
-                        res.status(200).json(req.file);
+                        res.status(200).json({
+                            "status": "success",
+                            "message": "User Updated.",
+                        });
                     })
                     .catch(err => {
                         console.log('err', err);
-                        res.status(500).json(err);
+                        res.status(500).json({
+                            "status": "error",
+                            "message": err.message,
+                        });
                     });
                 });
             })
             .catch(err => {
                 console.log('err', err);
-                res.status(500).json(err);
+                res.status(500).json({
+                    "status": "error",
+                    "message": err.message,
+                });
             });
         }else{
             let user = new db.users();            
@@ -99,17 +108,26 @@ let controller = {
             .then(staus => {
                 userMongoController.addUser(user.dataValues)
                 .then(status => {
-                    res.status(200).json(req.file);
+                    res.status(200).json({
+                        "status": "success",
+                        "message": "User Saved.",
+                    });
                 })
                 .catch(err => {
                     console.log(err);
-                    res.status(200).json(err);
+                    res.status(200).json({
+                        "status": "error",
+                        "message": err.message,
+                    });
                 });
                 
             })
             .catch(err => {
                 console.log(err);
-                res.status(200).json(err);
+                res.status(200).json({
+                    "status": "error",
+                    "message": err.message,
+                });
             });
         }
     },
@@ -163,7 +181,6 @@ let controller = {
         //     res.status(500).json(err);
         // });
     },
-
     deleteUser : (req, res, next) => {
         
         let userId = req.body.id;
@@ -176,7 +193,7 @@ let controller = {
                     console.log('YYYYYYYYYYYYYYYY', status);
                     res.status(200).json({
                         status:'success', 
-                        user
+                        message : 'User Deleted.'
                     });  
                 })
                 .catch(err => {

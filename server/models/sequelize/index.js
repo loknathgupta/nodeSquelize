@@ -2,9 +2,10 @@ const Sequelize = require('sequelize');
 const fs = require('fs');
 var path      = require('path');
 const UserModel = require('./user')
+require('dotenv').config();
 
 // Option 1: Passing parameters separately
-const sequelize = new Sequelize('sequelizeTest', 'root', 'pass@123', {
+const sequelize = new Sequelize('sequelizeTest', process.env.DB_USER, 'pass@123', {
   host: 'localhost',
   dialect: 'mysql' /* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */
 });
@@ -24,10 +25,10 @@ fs.readdirSync(__dirname)
 });
 
 
-// sequelize.sync({ force: true }) //true to drop and recreate the tables
-// .then(() => {
-//   console.log(`Database & tables created!`)
-// });
+sequelize.sync({ force: false }) //true to drop and recreate the tables
+.then(() => {
+  console.log(`Database & tables created!`)
+});
  
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
